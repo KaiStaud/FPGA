@@ -15,7 +15,8 @@
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+-- Default State of the button is hard coded to '0' -> Pull down.
+-- Modification to this needs to be done in constant default_state
 ----------------------------------------------------------------------------------
 
 
@@ -37,58 +38,51 @@ end button;
 architecture Behavioral of button is
 
 --Signal--
-signal counter: unsigned( 15 downto 0):= x"0000";-- counter value
-signal new_counter: unsigned(15 downto 0);
-signal time_elapsed: std_logic;-- flag to enable sampling 
-signal start_counter: std_logic := '0'; -- flag to start counting
+signal counter: unsigned( 23 downto 0):= x"000000";-- counter values
+signal new_counter: unsigned(23 downto 0):= x"000000";
+
 -- Constants--
-constant blocking_time: unsigned (15 downto 0) := x"000A";-- 10ms in ticks
+--constant time_out: unsigned (19 downto 0) := x"0000A";
+constant time_out : unsigned (23 downto 0) := x"1312D0";-- 10ms in ticks
 
+constant default_state: std_logic := '0';
 begin
 
-button_counter: process(clk,user_button)
+-- count clock ticks --
+timer: process(counter)
 begin
---once pushed start counting. counter needs to be zero to start
-if(rising_edge(clk) and counter =x"0000") then
-    start_counter <= '1';
-end if;
-end process button_counter;
+   
+        if(counter < time_out) then
+            new_counter <= counter +x"000001";
+        else
+            new_counter <= time_out;         
+    
+        end if;   
+    
+end process timer;
 
-delay: process(clk)
+sampler: process(counter,user_button)
 begin
--- when counter is started count up
-if(rising_edge(clk) and start_counter <= '1')then
-new_counter <= counter + x"0001";
-end if;
---after delay time raise flagend if;  
-if(rising_edge(clk) and counter = blocking_time)then
-   time_elapsed <= '1'; 
-end if;
 
-end process;
-
-button_sampler: process(clk,user_button)
-begin
---after timeout sample into d- type flip flop
---set or reset q 
---reset the counter 
-
-if(rising_edge(clk))then
+if(counter >=  time_out) then
     q_d <= user_button;
+else
+    q_d <= default_state;        
 end if;
-end process button_sampler;
 
-reg: process(clk)
+end process sampler;
+
+reg : process(clk,user_button)
 begin
 
-if(rising_edge(clk)) then
-counter <= new_counter;
---    if(new_counter >blocking_time)then --once overflown, reset counter
---        counter <= x"0000";
---    end if;    
+if(user_button = default_state) then
+    counter <= x"000000";
+--end if;    
+
+elsif(rising_edge(clk)) then
+    counter <= new_counter;
 end if;
 
-end process;
-
+end process reg;
 
 end Behavioral;
