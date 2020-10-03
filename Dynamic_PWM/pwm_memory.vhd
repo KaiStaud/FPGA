@@ -39,19 +39,19 @@ end pwm_memory;
 
 architecture Behavioral of pwm_memory is
 
-   -- ROM-Feld als Signaltyp definieren
+   -- ROM: Memory contains dutycles for linear fade
     type rom_mem is array (0 to 9) of unsigned(15 downto 0);
     constant ROM5 : rom_mem := (
         0  => x"0000",  -- 0
-        1  => x"0001",  -- 62 (5%)
-        2  => x"0002",  -- 125 (10%)
-        3  => x"0003",  -- 187 (15%)
-        4  => x"0004",  -- 275 (22%)
-        5  => x"0005",  -- 375 (30%)
-        6  => x"0006",  -- 500 (40%)
-        7  => x"0007",  -- 650 (52%)
-        8  => x"0009",  -- 875 (70%)
-        9  => x"000A");  -- 1250 (100%)
+        1  => x"00f4",  --  (5%)
+        2  => x"030d",  --  (10%)
+        3  => x"0401",  --  (15%)
+        4  => x"067c",  --  (22%)
+        5  => x"0927",  --  (30%)
+        6  => x"0c35",  --  (40%)
+        7  => x"0fa3",  --  (52%)
+        8  => x"155c",  --  (70%)
+        9  => x"30d4");  -- (100%)
 
 begin
 

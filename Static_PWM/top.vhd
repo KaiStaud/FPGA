@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 30.09.2020 19:15:01
+-- Create Date: 14.09.2020 20:17:10
 -- Design Name: 
--- Module Name: top - Behavioral
+-- Module Name: top_tb - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -32,59 +32,57 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity top is
-    Port ( clk : in STD_LOGIC;
-           q_led : out STD_LOGIC);
+Port ( 
+clk: in std_logic;
+q: out std_logic
+);
 end top;
 
 architecture Behavioral of top is
 
-component pwm_gen is
-port(
-clk:in std_logic;
-q:out std_logic;
-dutycycle: in unsigned(15 downto 0)
+component stat_pwm_gen is port
+(
+clk: in std_logic;
+q: out std_logic
 );
 end component;
 
-component mem_address_gen is
-port(
-clk:in std_logic;
-addr: out unsigned(3 downto 0)
+component clock_divider is port
+(
+clk: in std_logic;
+clk_out: out std_logic
 );
 end component;
 
-component pwm_memory is
-port(
-clk:in std_logic;
-addr: in unsigned(3 downto 0);
-dutycycle:out unsigned(15 downto 0)
+component pwm_memory is port
+(
+clk : in STD_LOGIC;
+update : in std_logic;
+dutycycle : out unsigned(15 downto 0)
 );
 end component;
 
-signal addr: unsigned(3 downto 0);
-signal mem_data: unsigned(15 downto 0);
-
+signal new_clk: std_logic;
+signal dutycycle: unsigned(15 downto 0);
 
 begin
 
-i_pwm_gen: pwm_gen port map
+pwm_gen: stat_pwm_gen port map
 (
 clk => clk,
-q => q_led,
-dutycycle => mem_data
+q => q
 );
 
-i_mem_address_gen:mem_address_gen port map
+clk_div: clock_divider port map
 (
 clk => clk,
-addr => addr
+clk_out => new_clk
 );
 
-i_pwm_mem: pwm_memory port map
+pwm_mem: pwm_memory port map
 (
-clk => clk,
-addr => addr,
-dutycycle => mem_data
+clk =>clk,
+update => new_clk,
+dutycycle => dutycyle
 );
-
 end Behavioral;
