@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 12.09.2020 19:39:28
+-- Create Date: 09.10.2020 20:55:19
 -- Design Name: 
 -- Module Name: top - Behavioral
 -- Project Name: 
@@ -37,37 +37,60 @@ end top;
 
 architecture Behavioral of top is
 
-component clock_divider is port 
-(
-clk: in std_logic;
-clk_out: out std_logic
-);
+component address_generator is
+port(
+    clk : in STD_LOGIC;
+    addr : out unsigned(3 downto 0);
+    dir: in std_logic;
+    limit_reached : out std_logic
+    );
 end component;
 
-component dutycycle_generator is port
-(
+component statemachine is
+port(
 clk : in STD_LOGIC;
-increment : in STD_LOGIC;
-dutycycle : out unsigned (15 downto 0)
+    pwm_limit_reached: in std_logic_vector(2 downto 0);
+    value_to_adder: out std_logic_VECTOR(2 downto 0)
 );
 end component;
 
-signal slow_clk:std_logic;
-signal dutycycle_int: unsigned (15 downto 0);
-
+signal int_addr: unsigned(3 downto 0);
+signal int_value_to_adder,int_pwm_limit_reached: std_logic_vector(2 downto 0);
+signal int_dir: std_logic;
 begin
 
-clk_div: clock_divider port map
-(
-clk =>clk,
-clk_out => slow_clk
-);
-
-dutycycle_gen: dutycycle_generator port map
+i_statemachine: statemachine port map
 (
 clk => clk,
-increment => slow_clk,
-dutycycle => dutycycle_int
+pwm_limit_reached => int_pwm_limit_reached,
+value_to_adder => int_value_to_adder
 );
+
+-- assign each bit of the value_to_adder bus to one input of an address generator
+-- one instance per color
+i_r_address_generator: address_generator port map
+(
+clk => clk,
+addr => int_addr,
+dir => int_value_to_adder(0),
+limit_reached => int_pwm_limit_reached(0)
+);
+
+i_g_address_generator: address_generator port map
+(
+clk => clk,
+addr => int_addr,
+dir => int_value_to_adder(1),
+limit_reached => int_pwm_limit_reached(1)
+);
+
+i_b_address_generator: address_generator port map
+(
+clk => clk,
+addr => int_addr,
+dir => int_value_to_adder(2),
+limit_reached => int_pwm_limit_reached(2)
+);
+
 
 end Behavioral;
