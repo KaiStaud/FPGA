@@ -54,7 +54,7 @@ clk : in STD_LOGIC;
 );
 end component;
 
-signal int_addr: unsigned(3 downto 0);
+signal r_addr,g_addr,b_addr: unsigned(3 downto 0);
 signal int_value_to_adder,int_pwm_limit_reached: std_logic_vector(2 downto 0);
 signal int_dir: std_logic;
 begin
@@ -71,15 +71,15 @@ value_to_adder => int_value_to_adder
 i_r_address_generator: address_generator port map
 (
 clk => clk,
-addr => int_addr,
-dir => int_value_to_adder(0),
-limit_reached => int_pwm_limit_reached(0)
+addr => r_addr,
+dir => int_value_to_adder(2),
+limit_reached => int_pwm_limit_reached(2)
 );
 
 i_g_address_generator: address_generator port map
 (
 clk => clk,
-addr => int_addr,
+addr => g_addr,
 dir => int_value_to_adder(1),
 limit_reached => int_pwm_limit_reached(1)
 );
@@ -87,9 +87,9 @@ limit_reached => int_pwm_limit_reached(1)
 i_b_address_generator: address_generator port map
 (
 clk => clk,
-addr => int_addr,
-dir => int_value_to_adder(2),
-limit_reached => int_pwm_limit_reached(2)
+addr => b_addr,
+dir => int_value_to_adder(0),
+limit_reached => int_pwm_limit_reached(0)
 );
 
 

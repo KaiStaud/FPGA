@@ -41,27 +41,26 @@ end address_generator;
 
 architecture Behavioral of address_generator is
 
-constant topvalue:unsigned(27 downto 0):=x"3B9ACA0"; -- 62 M clocks = 500 msec
+--constant topvalue:unsigned(27 downto 0):=x"3B9ACA0"; -- 62 M clocks = 500 msec
  
 -- simulation set--
---constant topvalue:unsigned(27 downto 0):=x"0000009";
+constant topvalue:unsigned(27 downto 0):=x"0000009";
 
 -- independent signals--
-signal count,next_count: unsigned(27 downto 0):= x"0000000";
-signal int_addr, next_int_addr:unsigned (3 downto 0):=x"0";
+signal int_addr: unsigned(3 downto 0):=x"0";
+signal next_int_addr:unsigned (3 downto 0):=x"0";
 
 
 begin
 
 -- connect port to internal signal
-addr <= int_addr;
+addr <= next_int_addr;
 
 -- counter process ,resets once limit is surpassed
 -- generates the address, too
 updowncounter: process(clk)
 begin
 if(rising_edge(clk)) then
-    count <= next_count +x"0000001";
 
 -- when 500sec are waited reset counter and increment address
     if(dir = '1') then
@@ -71,11 +70,12 @@ if(rising_edge(clk)) then
     end if;
     
     -- avoid overflows and underflows
-    if( next_int_addr = x"A")then
+    if( next_int_addr = x"A" and dir = '1')then
         int_addr <= x"A";
         limit_reached <= '1';
+    
     end if;
-    if( next_int_addr = x"0") then
+    if( next_int_addr = x"0" and dir = '0') then
         int_addr <= x"0";
         limit_reached <= '0';
     end if;
@@ -88,8 +88,7 @@ end process updowncounter;
 counter_register: process(clk)
 begin
 if(rising_edge(clk))then
- next_count  <= count;
- next_int_addr <= int_addr;
+next_int_addr <= int_addr;
 end if;
 end process counter_register;
 

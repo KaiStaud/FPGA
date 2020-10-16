@@ -54,73 +54,81 @@ begin
 if(rising_edge(clk))then
 case color is
 
-when RGB =>
-if(pwm_limit_reached = b"111") then
-next_color <= GB;
-else
-next_color <= RGB;
---reduce R until it reaches zero
-value_to_adder <= b"011";
-end if;
-
-when  GB =>
-if(pwm_limit_reached = b"001") then -- only blue active
-next_color <= B;
-else
-next_color <= GB;
-value_to_adder <= B"001";
-end if;
-
-when B =>
-if(pwm_limit_reached = b"101") then
-next_color <= RB;
-else
-next_color <= B;
-value_to_adder <= b"101";
-end if;
-
-when RB => 
-if(pwm_limit_reached = b"100") then
-next_color <= R;
-else
-next_color <= RB;
-value_to_adder <= "100";
-end if;
-
-when R =>
-if(pwm_limit_reached = b"110") then
-next_color <= RG;
-else
-next_color <= R;
-value_to_adder <= "110";
-end if;
-
-when RG =>
-if(pwm_limit_reached = b"010") then
-next_color <= G;
-else
-next_color <= RG;
-value_to_adder <= "010";
-end if;
-
-when G =>
-if(pwm_limit_reached = b"000") then
-next_color <= Off;
-else
-next_color <= G;
-value_to_adder <= b"000";
-end if;
-
-when Off =>
-if(pwm_limit_reached = b"111")then
-next_color <= RGB;
-else
-next_color <= Off;
-value_to_adder <= "111";
-end if;
+    when RGB =>
+    if(pwm_limit_reached = b"011") then
+    next_color <= GB;
+    else
+    next_color <= RGB;
+    --reduce R until it reaches zero
+    end if;
+    value_to_adder <= b"011";
+    
+    when  GB =>
+    if(pwm_limit_reached = b"001") then -- only blue active
+    next_color <= B;
+    else
+    next_color <= GB;
+    end if;
+    value_to_adder <= B"001";
+    
+    when B =>
+    if(pwm_limit_reached = b"101") then
+    next_color <= RB;
+    else
+    next_color <= B;
+    end if;
+    value_to_adder <= b"101";
+    
+    when RB => 
+    if(pwm_limit_reached = b"100") then
+    next_color <= R;
+    else
+    next_color <= RB;
+    end if;
+    value_to_adder <= "100";
+    
+    when R =>
+    if(pwm_limit_reached = b"110") then
+    next_color <= RG;
+    else
+    next_color <= R;
+    end if;
+    value_to_adder <= "110";
+    
+    when RG =>
+    if(pwm_limit_reached = b"010") then
+    next_color <= G;
+    else
+    next_color <= RG;
+    end if;
+    value_to_adder <= "010";
+    
+    when G =>
+    if(pwm_limit_reached = b"000") then
+    next_color <= Off;
+    else
+    next_color <= G;
+    end if;
+    value_to_adder <= b"000";
+    
+    when Off =>
+    if(pwm_limit_reached = b"111")then
+    next_color <= RGB;
+    else
+    next_color <= Off;
+    end if;
+    value_to_adder <= "111";
 
 end case;
 end if;
 end process color_cycle;
+
+statemachine_register: process(clk)
+begin
+if(rising_edge(clk)) then
+color <= next_color;
+end if;
+
+end process statemachine_register;
 
 end Behavioral;
