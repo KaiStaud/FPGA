@@ -32,10 +32,19 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity top is
-    Port ( clk : in STD_LOGIC);
+    Port ( clk : in STD_LOGIC;
+    rgb_q : out std_logic_vector(2 downto 0)
+    );
 end top;
 
 architecture Behavioral of top is
+
+component clock_divider is 
+port(
+    clk : in std_logic;
+    clk_out : out std_logic
+);
+end component;
 
 component address_generator is
 port(
@@ -54,10 +63,36 @@ clk : in STD_LOGIC;
 );
 end component;
 
+
+component pwm_gen is 
+port(
+    clk : in STD_LOGIC;
+    q : out STD_LOGIC;
+    dutycycle: in unsigned(15 downto 0)
+    );
+end component;
+
+component pwm_memory is 
+port(
+    clk : in STD_LOGIC;
+    addr : in unsigned(3 downto 0);
+    dutycycle : out unsigned(15 downto 0)
+    );
+end component;
+
+signal slow_clk: std_logic;    
 signal r_addr,g_addr,b_addr: unsigned(3 downto 0);
 signal int_value_to_adder,int_pwm_limit_reached: std_logic_vector(2 downto 0);
 signal int_dir: std_logic;
+signal r_dutycycle,g_dutycycle,b_dutycycle : unsigned(15 downto 0);
+--signal rgb_q: std_logic_vector(3 downto 0);
 begin
+
+i_clock_divider : clock_divider port map
+(
+clk => clk,
+clk_out => slow_clk
+);
 
 i_statemachine: statemachine port map
 (
@@ -70,7 +105,7 @@ value_to_adder => int_value_to_adder
 -- one instance per color
 i_r_address_generator: address_generator port map
 (
-clk => clk,
+clk => slow_clk,
 addr => r_addr,
 dir => int_value_to_adder(2),
 limit_reached => int_pwm_limit_reached(2)
@@ -78,7 +113,7 @@ limit_reached => int_pwm_limit_reached(2)
 
 i_g_address_generator: address_generator port map
 (
-clk => clk,
+clk => slow_clk,
 addr => g_addr,
 dir => int_value_to_adder(1),
 limit_reached => int_pwm_limit_reached(1)
@@ -86,11 +121,53 @@ limit_reached => int_pwm_limit_reached(1)
 
 i_b_address_generator: address_generator port map
 (
-clk => clk,
+clk => slow_clk,
 addr => b_addr,
 dir => int_value_to_adder(0),
 limit_reached => int_pwm_limit_reached(0)
 );
 
+-- assign each address to one ROM Array, output is input to pwm generator
+i_r_pwm_memory: pwm_memory port map
+(
+clk => clk,
+addr => r_addr,
+dutycycle => r_dutycycle
+);
 
+i_g_pwm_memory: pwm_memory port map
+(
+clk => clk,
+addr => g_addr,
+dutycycle => g_dutycycle
+);
+
+i_b_pwm_memory: pwm_memory port map
+(
+clk => clk,
+addr => b_addr,
+dutycycle => b_dutycycle
+);
+
+-- generate three seperate pwm signals
+i_r_pwm_gen : pwm_gen port map
+(
+clk => clk,
+q => rgb_q(2),
+dutycycle => r_dutycycle
+);
+
+i_g_pwm_gen : pwm_gen port map
+(
+clk => clk,
+q => rgb_q(1),
+dutycycle => g_dutycycle
+);
+
+i_b_pwm_gen : pwm_gen port map
+(
+clk => clk,
+q => rgb_q(0),
+dutycycle => b_dutycycle
+);
 end Behavioral;
