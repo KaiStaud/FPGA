@@ -70,12 +70,12 @@ if(rising_edge(clk)) then
     end if;
     
     -- avoid overflows and underflows
-    if( next_int_addr = x"A" and dir = '1')then
+    if( int_addr = x"A" and dir = '1')then
         int_addr <= x"A";
         limit_reached <= '1';
     
     end if;
-    if( next_int_addr = x"0" and dir = '0') then
+    if( int_addr = x"0" and dir = '0') then
         int_addr <= x"0";
         limit_reached <= '0';
     end if;

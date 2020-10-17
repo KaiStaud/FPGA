@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 14.09.2020 20:17:10
+-- Create Date: 30.09.2020 19:15:37
 -- Design Name: 
 -- Module Name: top_tb - Behavioral
 -- Project Name: 
@@ -37,28 +37,33 @@ end top_tb;
 
 architecture Behavioral of top_tb is
 
-component top is
-Port
-(
-clk: in std_logic
+component top
+port(
+clk: in std_logic;
+rgb_q : out std_logic_vector(2 downto 0)
 );
-end component top;
+end component;
+
 
 signal clk_tb: std_logic;
+signal rgb_q_tb : std_logic_vector(2 downto 0);
+
 begin
 
-DUT_top: top port map
-(
-clk => clk_tb
-);
+DUT_top : top port map
+			(
+			clk	=> clk_tb,
+			rgb_q => rgb_q_tb
+			);
+			 
 
-clock_generator : process
-begin
-    clk_tb <= '0';
-    WAIT FOR 0.5 ns;
+		clock_generator : process
+		begin
+			clk_tb <= '0';
+			WAIT FOR 0.5 ns;
 
-    clk_tb <= '1';
-    WAIT FOR 0.5 ns;
-end process clock_generator;
+			clk_tb <= '1';
+			WAIT FOR 0.5 ns;
+		end process clock_generator;
 
 end Behavioral;
