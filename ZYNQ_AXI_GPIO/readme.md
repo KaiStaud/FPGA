@@ -18,4 +18,4 @@
 ## Demonstration
 When sucessfully launched on board, the hardware can be tested by pressing the user buttons.
 The leds should change according to the following gif below:
-![](demo.gif)
+![](demo[1].mp4)
