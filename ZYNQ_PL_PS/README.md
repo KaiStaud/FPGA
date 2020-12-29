@@ -4,6 +4,7 @@ The onboard userbuttons are used as an input to an and gate, and the resolving o
 then written to the PS via the AXI Interface and displayed using one LED.
 The PS then switches the onboard LED according to the truth table of an inverter gate.
 After programming the FPGA the LEDs should switch as shown in the following gif:
+![Demo Video](demo.gif)
 
 
 ## How to build this project?
