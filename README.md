@@ -14,17 +14,17 @@ I recomend to create a simple project(i.e an simple and gate) for validating tha
 After the sucessful install, feel free to visit the subdirectories.
 
 ## level 2 projects: 
-###Simple beginner projects using the PL
+### Simple beginner projects using the PL
 - Buttons
 - Static PWM
 - Dynamic PWM
 - RGB Fader
 
 ## level 1 projects:
-###PL and PS are used together, but without any operation system ( only superloop with interrupts)
+### PL and PS are used together, but without any operation system ( only superloop with interrupts)
 - ZYNQ_AXI_GPIO
 - ZYNQ_XADC
 - ZYNQ_PL_PS
 
 ## level 0 projects:
-###Releasing the full power of the ZYNQ Core: Running PL and PS simulatiously aswell as an Yocto project based OS supported by an Freertos Realtime OS
+### Releasing the full power of the ZYNQ Core: Running PL and PS simulatiously aswell as an Yocto project based OS supported by an Freertos Realtime OS
