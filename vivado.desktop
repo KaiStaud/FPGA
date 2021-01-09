@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon=/tools/Xilinx/Vivado/2020.2/doc/images/vivado_logo.ico
+Name[en_US]=Vivado 2020.2
+Exec=/tools/Xilinx/Vivado/2020.2/bin/vivado
+Name=Vivado 2020.2
