@@ -5,7 +5,7 @@ Every project is dedicated to an peripheral or topic and implementated on an Xil
 
 # Where to start ?
 I use Xilinx' Vitis IDE for developing PL-PS projects. The current release is V2020.2(, which I'm currently using).
-You can try
+I'm currently using Ubuntu 16.04.07 LTS for development.
 
 ## Linux specific installation Steps
 **Please use one of Xilinx (officially) supported distributions(https://www.xilinx.com/support/documentation/sw_manuals/xilinx2020_2/ug973-vivado-release-notes-install-license.pdf) . Otherwise you might not be able to export the hardware to Vitis or experience other errors. This will not be solved by changing the distribution string in /etc/os-releases to an official supported distro! I also recommend to use a distro which is also supported by the Yocto Project(https://www.yoctoproject.org/docs/2.0/ref-manual/ref-manual.html#detailed-supported-distros), if you want to follow my further advanced projects!**
