@@ -22,7 +22,7 @@ If the command fails try the following steps:
 - Change the permission of the install directory: chown 777 /tools/Xilinx
 
 After successfully sourcing the directory from ~ ,type: vivado &. Vivado should now start.
-You might want a desktop shortcut to launch the enviroment quick and easy, therefore create an desktop entry:
+You might want a desktop shortcut to launch the enviroment quick and easy, therefore place the .desktop files in ~/.local/share/applications/<filename.desktop>
 
 ## Installing board files
 For using the digilent boards, install the their boardfiles as described here:
