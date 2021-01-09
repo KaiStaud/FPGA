@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon=/tools/Xilinx/Vitis/2020.2/doc/images/ide_icon.ico
+Name[en_US]=Vitis 2020.2
+Exec=/tools/Xilinx/Vitis/2020.2/bin/vitis
+Name=Vitis 2020.2
