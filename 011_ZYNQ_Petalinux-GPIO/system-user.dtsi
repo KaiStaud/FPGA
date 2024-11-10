@@ -1,0 +1,19 @@
+/include/ "system-conf.dtsi"
+/ {
+     aliases {
+        /delete-property/ cpu1;
+        /delete-property/ funnel0_in_port1;
+    };
+    /delete-node/ cpu@1;
+
+};
+
+ 
+
+&amba{
+    /delete-node/ ptm@f889d000;
+};
+
+&funnel0_in_port1{
+   /delete-property/ remote-endpoint; 
+};
